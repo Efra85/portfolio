@@ -36,7 +36,7 @@ export default function Home() {
           </Link>
 
           <a
-            href="/cv/efraim-correra-ortiz.pdf"
+            href="/cv/efraim-correa-ortiz.pdf"
             className="px-8 py-4 rounded-xl border border-slate-700 hover:border-fuchsia-400 transition"
             download
           >
