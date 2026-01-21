@@ -33,6 +33,49 @@ export default function Projects() {
             operacional mesmo em caso de indisponibilidade de serviços externos
             de IA.
           </div>
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:border-cyan-500 transition">
+            <h3 className="text-xl font-semibold text-cyan-400">
+              Incident Classification API
+            </h3>
+
+            <p className="text-zinc-400 mt-2">
+              API backend em Java para classificação automática de incidentes
+              utilizando IA com fallback resiliente.
+            </p>
+
+            <ul className="text-sm text-zinc-500 mt-4 space-y-1">
+              <li>• Java 17 + Spring Boot</li>
+              <li>• IA aplicada a sistemas corporativos</li>
+              <li>• Fallback local inteligente</li>
+              <li>• Swagger / H2 / JPA</li>
+            </ul>
+
+            <div className="flex gap-3 mt-6">
+              <a
+                href="https://SEU_DEPLOY_API/health"
+                target="_blank"
+                className="px-4 py-2 text-sm bg-zinc-800 rounded hover:bg-cyan-600"
+              >
+                Health
+              </a>
+
+              <a
+                href="http://localhost:8080/swagger-ui.htm"
+                target="_blank"
+                className="px-4 py-2 text-sm bg-zinc-800 rounded hover:bg-cyan-600"
+              >
+                Swagger
+              </a>
+
+              <a
+                href="https://github.com/Efra85/API-SpringBoot-IA"
+                target="_blank"
+                className="px-4 py-2 text-sm bg-zinc-800 rounded hover:bg-cyan-600"
+              >
+                GitHub
+              </a>
+            </div>
+          </div>
 
           <div className="grid md:grid-cols-2 gap-8 mt-8">
             {/* Tecnologias */}
