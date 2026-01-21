@@ -52,14 +52,6 @@ export default function Projects() {
 
             <div className="flex gap-3 mt-6">
               <a
-                href="https://SEU_DEPLOY_API/health"
-                target="_blank"
-                className="px-4 py-2 text-sm bg-zinc-800 rounded hover:bg-cyan-600"
-              >
-                Health
-              </a>
-
-              <a
                 href="http://localhost:8080/swagger-ui.htm"
                 target="_blank"
                 className="px-4 py-2 text-sm bg-zinc-800 rounded hover:bg-cyan-600"
@@ -70,6 +62,7 @@ export default function Projects() {
               <a
                 href="https://github.com/Efra85/API-SpringBoot-IA"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="px-4 py-2 text-sm bg-zinc-800 rounded hover:bg-cyan-600"
               >
                 GitHub
