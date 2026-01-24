@@ -103,7 +103,7 @@ export default function Projects() {
               disabled={loading || apiStatus === "offline"}
               className="w-full md:w-auto px-10 py-3 bg-sky-600 hover:bg-sky-500 disabled:bg-slate-800 disabled:text-slate-500 text-white font-bold rounded-lg transition-all"
             >
-              {loading ? "Analisando..." : "Classificar com IA"}
+              {loading ? "Analisando..." : "Testar API"}
             </button>
           </form>
 
