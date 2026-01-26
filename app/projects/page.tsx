@@ -10,6 +10,7 @@ export default function Projects() {
   const [result, setResult] = useState<string | null>(null);
   const [description, setDescription] = useState("");
 
+  // Verifica se a API está online no Render ao carregar a página
   useEffect(() => {
     fetch("https://api-springboot-ia.onrender.com/")
       .then((res) =>
@@ -21,19 +22,28 @@ export default function Projects() {
   const handleClassify = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setResult(null); // Limpa resultado anterior
+
     try {
       const response = await fetch(
         "https://api-springboot-ia.onrender.com/api/incidents",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ description }),
+          body: JSON.stringify({ description }), // Verifique se o Java espera "description" ou "descricao"
         },
       );
+
+      if (!response.ok) throw new Error("Erro na resposta da API");
+
       const data = await response.json();
-      setResult(data.classification);
-    } catch {
-      setResult("Erro ao conectar com a API Java.");
+      // Ajuste 'data.classification' para o nome do campo retornado pelo seu JSON no Java
+      setResult(data.classification || "Incidente processado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao testar API:", error);
+      setResult(
+        "Erro ao conectar com a API Java. Verifique o console ou o status da API.",
+      );
     } finally {
       setLoading(false);
     }
@@ -41,9 +51,7 @@ export default function Projects() {
 
   return (
     <main className="min-h-screen px-6 py-24 max-w-6xl mx-auto">
-      {/* SEÇÃO CORRIGIDA: Títulos empilhados e Status à direita */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-12">
-        {/* Bloco de Títulos: O flex-col aqui garante que fiquem um abaixo do outro */}
         <div className="flex flex-col">
           <h2 className="text-4xl font-bold text-sky-400">| Projetos Java |</h2>
           <h3 className="text-2xl font-semibold text-white/90 mt-2">
@@ -51,7 +59,6 @@ export default function Projects() {
           </h3>
         </div>
 
-        {/* Bloco do Status: Mantém-se isolado no canto */}
         <div className="flex items-center gap-2 bg-slate-800/50 px-4 py-2 rounded-full border border-slate-700">
           <div
             className={`w-2.5 h-2.5 rounded-full ${
@@ -76,11 +83,7 @@ export default function Projects() {
           <p className="mt-2 text-slate-400">
             API REST desenvolvida em Spring Boot para registro e classificação
             de incidentes de segurança, com integração de Inteligência
-            Artificial e mecanismo de fallback resiliente , garantindo
-            funcionamento mesmo quando serviços externos estão indisponíveis.
-            Este projeto simula um sistema real de gerenciamento de incidentes ,
-            comum em ambientes corporativos e times de segurança (SOC / Blue
-            Team).
+            Artificial e mecanismo de fallback resiliente...
           </p>
         </div>
 
