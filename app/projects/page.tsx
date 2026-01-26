@@ -27,6 +27,34 @@ export default function Projects() {
     setResult(null);
 
     try {
+      const response = await fetch(
+        "https://api-springboot-ia.onrender.com/incidents", // URL corrigida (sem o /api)
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          // O Java espera exatamente a chave "description"
+          body: JSON.stringify({ description: description }),
+        },
+      );
+
+      // Se o Java retornar erro, precisamos ler a mensagem de erro
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro na resposta da API");
+      }
+
+      const data = await response.json();
+
+      // Ajuste para exibir a classificação que vem da sua IA
+      setResult(data.classification || "Incidente processado com sucesso!");
+    } catch (error) {
+      console.error("Erro detalhado:", error);
+      setResult("Erro ao conectar com a API Java. Verifique o console.");
+    } finally {
+      setLoading(false);
+    }
+
+    try {
       // AJUSTE 2: Removi o "/api" da URL para bater com seu @RequestMapping("/incidents") do Java
       const response = await fetch(
         "https://api-springboot-ia.onrender.com/incidents", // URL correta conforme o Java
