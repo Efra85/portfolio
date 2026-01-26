@@ -11,7 +11,7 @@ export default function Projects() {
   const [description, setDescription] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8080/health")
+    fetch("https://api-springboot-ia.onrender.com/")
       .then((res) =>
         res.ok ? setApiStatus("online") : setApiStatus("offline"),
       )
@@ -22,7 +22,7 @@ export default function Projects() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch("https://api-springboot-ia.onrender.com", {
+      const response = await fetch("https://api-springboot-ia.onrender.com/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ description }),
