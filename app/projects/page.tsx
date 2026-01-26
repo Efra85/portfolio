@@ -49,9 +49,7 @@ export default function Projects() {
       }
 
       setResult(
-        data.suggestion ||
-          data.classification ||
-          "Incidente processado com sucesso!",
+        `Severidade: ${data.severity} | Recomendação: ${data.recommendation}`,
       );
 
       // Limpa os campos após o sucesso para novo teste
