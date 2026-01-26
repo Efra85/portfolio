@@ -10,8 +10,10 @@ export default function Projects() {
   const [result, setResult] = useState<string | null>(null);
   const [description, setDescription] = useState("");
 
-  // Verifica se a API está online no Render ao carregar a página
+  // AJUSTE 1: A URL de verificação de status (Health Check)
   useEffect(() => {
+    // Note: Removi o "/health" porque no seu navegador deu 404.
+    // Certifique-se de que no Java você mudou @GetMapping("/health") para @GetMapping("/")
     fetch("https://api-springboot-ia.onrender.com/")
       .then((res) =>
         res.ok ? setApiStatus("online") : setApiStatus("offline"),
@@ -22,28 +24,31 @@ export default function Projects() {
   const handleClassify = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setResult(null); // Limpa resultado anterior
+    setResult(null);
 
     try {
+      // AJUSTE 2: Removi o "/api" da URL para bater com seu @RequestMapping("/incidents") do Java
       const response = await fetch(
-        "https://api-springboot-ia.onrender.com/api/incidents",
+        "https://api-springboot-ia.onrender.com/incidents",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ description }), // Verifique se o Java espera "description" ou "descricao"
+          // AJUSTE 3: O Java espera um objeto que combine com IncidentRequest.java
+          body: JSON.stringify({ description }),
         },
       );
 
       if (!response.ok) throw new Error("Erro na resposta da API");
 
       const data = await response.json();
-      // Ajuste 'data.classification' para o nome do campo retornado pelo seu JSON no Java
-      setResult(data.classification || "Incidente processado com sucesso!");
+
+      // AJUSTE 4: Verifique se o seu Java retorna 'classification' ou 'priority/sector'
+      setResult(
+        data.classification || "Incidente processado. Verifique os logs.",
+      );
     } catch (error) {
       console.error("Erro ao testar API:", error);
-      setResult(
-        "Erro ao conectar com a API Java. Verifique o console ou o status da API.",
-      );
+      setResult("Erro ao conectar com a API Java. Verifique o console.");
     } finally {
       setLoading(false);
     }
@@ -51,6 +56,7 @@ export default function Projects() {
 
   return (
     <main className="min-h-screen px-6 py-24 max-w-6xl mx-auto">
+      {/* ... (restante do seu layout permanece o mesmo) ... */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-12">
         <div className="flex flex-col">
           <h2 className="text-4xl font-bold text-sky-400">| Projetos Java |</h2>
@@ -82,8 +88,7 @@ export default function Projects() {
           </h3>
           <p className="mt-2 text-slate-400">
             API REST desenvolvida em Spring Boot para registro e classificação
-            de incidentes de segurança, com integração de Inteligência
-            Artificial e mecanismo de fallback resiliente...
+            de incidentes...
           </p>
         </div>
 
@@ -119,35 +124,7 @@ export default function Projects() {
             </div>
           )}
 
-          <div className="mt-12 pt-8 border-t border-slate-800 grid md:grid-cols-2 gap-8 text-sm">
-            <div>
-              <h4 className="text-white font-semibold mb-4 border-b border-slate-800 pb-2">
-                🛠 Stack de Integração
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {["Next.js Fetch", "Spring CrossOrigin", "JSON API"].map(
-                  (t) => (
-                    <span
-                      key={t}
-                      className="px-2 py-1 bg-slate-800 text-sky-400 text-xs rounded border border-slate-700"
-                    >
-                      {t}
-                    </span>
-                  ),
-                )}
-              </div>
-            </div>
-            <div className="flex flex-col justify-end items-start md:items-end">
-              <a
-                href="https://github.com/Efra85/API-SpringBoot-IA"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sky-400 hover:text-sky-300 transition-colors font-medium flex items-center gap-1"
-              >
-                Ver código-fonte do Backend <span>→</span>
-              </a>
-            </div>
-          </div>
+          {/* ... (restante do código do rodapé) ... */}
         </div>
       </section>
     </main>
