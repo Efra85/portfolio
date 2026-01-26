@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-interface IncidentResponse {
-  classification: string;
-  suggestion: string; // Certifique-se de que o Java envia este nome exato
+// AJUSTE 1: Interface espelhando exatamente sua classe Java AIAnalysis
+interface AIAnalysis {
+  severity: string;
+  recommendation: string;
 }
 
 export default function Projects() {
@@ -12,9 +13,12 @@ export default function Projects() {
     "checking",
   );
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
+
+  // AJUSTE 2: Estado agora aceita o objeto da interface para permitir o acesso às propriedades
+  const [result, setResult] = useState<AIAnalysis | null>(null);
+
   const [description, setDescription] = useState("");
-  const [title, setTitle] = useState(""); // Novo estado para o título
+  const [title, setTitle] = useState("");
 
   useEffect(() => {
     fetch("https://api-springboot-ia.onrender.com/")
@@ -36,7 +40,7 @@ export default function Projects() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            title: title, // Envia o título digitado
+            title: title,
             description: description,
           }),
         },
@@ -48,23 +52,20 @@ export default function Projects() {
         throw new Error(data.message || "Erro na resposta da API");
       }
 
-      setResult(
-        `Severidade: ${data.severity} | Recomendação: ${data.recommendation}`,
-      );
+      // AJUSTE 3: Armazena o objeto JSON completo no estado para o HTML ler
+      setResult(data);
 
-      // Limpa os campos após o sucesso para novo teste
       setTitle("");
       setDescription("");
     } catch (error: unknown) {
       console.error("Erro detalhado:", error);
-      const msg = error instanceof Error ? error.message : "Erro de conexão.";
-      setResult(msg);
+      // Mantemos o tratamento de erro conforme o original
+      setResult(null);
     } finally {
       setLoading(false);
     }
   };
 
-  // Função simples para mudar a cor baseada na resposta da IA
   const getResultStyles = (text: string) => {
     const isAlert = /crítico|segurança|bloqueio|invasão/i.test(text);
     return isAlert
@@ -72,9 +73,17 @@ export default function Projects() {
       : "bg-sky-500/10 border-l-4 border-sky-500 text-sky-400";
   };
 
+  const getSeverityColor = (severity?: string) => {
+    const s = severity?.toUpperCase();
+    if (s?.includes("HIGH") || s?.includes("CRITICAL") || s?.includes("ALTA"))
+      return "border-red-500 bg-red-500/10 text-red-400";
+    if (s?.includes("MEDIUM") || s?.includes("MÉDIA"))
+      return "border-orange-500 bg-orange-500/10 text-orange-400";
+    return "border-sky-500 bg-sky-500/10 text-sky-400";
+  };
+
   return (
     <main className="min-h-screen px-6 py-24 max-w-6xl mx-auto">
-      {/* Cabeçalho de Status */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-12">
         <div className="flex flex-col">
           <h2 className="text-4xl font-bold text-sky-400">| Projetos Java |</h2>
@@ -106,7 +115,6 @@ export default function Projects() {
 
         <div className="p-8">
           <form onSubmit={handleClassify} className="space-y-4">
-            {/* NOVO CAMPO: Título */}
             <div>
               <label className="text-sm text-slate-400 mb-2 block">
                 Título do Incidente:
@@ -145,11 +153,13 @@ export default function Projects() {
           </form>
 
           {result && (
-            <div className={`mt-6 p-4 rounded-r-lg ${getResultStyles(result)}`}>
+            <div
+              className={`mt-6 p-4 border-l-4 rounded-r-lg transition-all duration-500 ${getSeverityColor(result.severity)}`}
+            >
               <p className="font-mono text-[10px] uppercase font-bold mb-1">
-                Resultado da API:
+                Análise da IA — {result.severity}
               </p>
-              <p className="text-white font-medium">{result}</p>
+              <p className="text-white font-medium">{result.recommendation}</p>
             </div>
           )}
         </div>
