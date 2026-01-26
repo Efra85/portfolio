@@ -22,11 +22,14 @@ export default function Projects() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch("https://api-springboot-ia.onrender.com/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ description }),
-      });
+      const response = await fetch(
+        "https://api-springboot-ia.onrender.com/api/incidents",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ description }),
+        },
+      );
       const data = await response.json();
       setResult(data.classification);
     } catch {
