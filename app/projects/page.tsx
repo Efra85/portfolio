@@ -29,11 +29,10 @@ export default function Projects() {
     try {
       // AJUSTE 2: Removi o "/api" da URL para bater com seu @RequestMapping("/incidents") do Java
       const response = await fetch(
-        "https://api-springboot-ia.onrender.com/incidents",
+        "https://api-springboot-ia.onrender.com/incidents", // Removido o /api/
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          // AJUSTE 3: O Java espera um objeto que combine com IncidentRequest.java
           body: JSON.stringify({ description }),
         },
       );
